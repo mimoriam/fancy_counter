@@ -1,31 +1,24 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Count from "@/app/components/Count";
 import ResetButton from "@/app/components/ResetButton";
 import CountButton from "@/app/components/CountButton";
+import { useKeyPressEvent } from "react-use";
 
 export default function Card() {
   const [count, setCount] = useState<number>(0);
   const locked = count === 5;
 
-  useEffect(() => {
-    const handleKeydown = (event: KeyboardEvent) => {
-      if (event.code === "Space") {
-        const newCount = count + 1;
-        if (newCount > 5) {
-          setCount(5);
-          return;
-        }
-        setCount(newCount);
-      }
-    };
+  const incrementOnSpace = () => {
+    const newCount = count + 1;
+    if (newCount > 5) {
+      setCount(5);
+      return;
+    }
+    setCount(newCount);
+  };
 
-    window.addEventListener("keydown", handleKeydown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeydown);
-    };
-  }, [count]);
+  useKeyPressEvent(" ", incrementOnSpace);
 
   return (
     <main>
